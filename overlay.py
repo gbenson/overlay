@@ -32,7 +32,7 @@ def filenames(*args):
         yield filename
 
 class Overlayer(object):
-    def __init__(self, size):
+    def __init__(self):
         self.totals = None
 
     def push(self, filename):
@@ -68,10 +68,10 @@ class Overlayer(object):
         img.save("%s-%04d.png" % (self.camera, self.__last))
 
 if __name__ == "__main__":
-    ol = Overlayer((640, 480))
+    ol = Overlayer()
     for filename in filenames(os.path.join(os.environ["HOME"],
-                                           "Pictures", "s4i"),
-                              "imgp", ".jpg"):
+                                           "Pictures", "raz"),
+                              "img_", ".jpg"):
         try:
             ol.push(filename)
         except:
