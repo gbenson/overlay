@@ -72,8 +72,8 @@ class Overlayer(object):
 if __name__ == "__main__":
     ol = Overlayer()
     for filename in filenames(os.path.join(os.environ["HOME"],
-                                           "Pictures", "htc"),
-                              "imag", ".jpg"):
+                                           "Pictures", "dsc"),
+                              "dsc_", ".jpg"):
         try:
             ol.push(filename)
         except:
