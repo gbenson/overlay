@@ -37,7 +37,7 @@ class Overlayer(object):
 
     def push(self, filename):
         print(filename)
-        index = int(filename[-8:-4])
+        index = int(filename[-7:-4])
         img = Image.open(filename)
         if self.totals is None:
             self.camera = filename.split(os.sep, 5)[-2]
@@ -70,8 +70,8 @@ class Overlayer(object):
 if __name__ == "__main__":
     ol = Overlayer()
     for filename in filenames(os.path.join(os.environ["HOME"],
-                                           "Pictures", "raz"),
-                              "img_", ".jpg"):
+                                           "Pictures", "n63"),
+                              "Image", ".jpg"):
         try:
             ol.push(filename)
         except:
