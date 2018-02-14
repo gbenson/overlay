@@ -37,19 +37,21 @@ class Overlayer(object):
 
     def push(self, filename):
         print(filename)
-        index = int(filename[-7:-4])
+        index = int(filename[-8:-4])
         img = Image.open(filename)
         if self.totals is None:
             self.camera = filename.split(os.sep, 5)[-2]
             self.__size = img.size
+            print("Initializing", self.__size)
             self.totals = numpy.zeros((self.__size[1], self.__size[0], 3),
                                       dtype=numpy.int64)
+        if cmp(*img.size) != cmp(*self.__size):
+            img = img.transpose(Image.ROTATE_270)
         if img.size != self.__size:
             scale = [i / s for i, s in zip(img.size, self.__size)]
-            if scale[0] != scale[1] and img.size != (self.__size[0] - 1,
-                                                     self.__size[1] - 1):
-                print(img.size, scale)
-                raise AssertionError
+            if (1 - scale[0] / scale[1]) > 0.005:
+                print("\x1B[31m%s %s\x1B[0m" % (img.size, scale))
+                #raise AssertionError
             img = img.resize(self.__size, Image.ANTIALIAS)
         self.totals += numpy.array(img)
         self.__last = index
@@ -70,8 +72,8 @@ class Overlayer(object):
 if __name__ == "__main__":
     ol = Overlayer()
     for filename in filenames(os.path.join(os.environ["HOME"],
-                                           "Pictures", "n63"),
-                              "Image", ".jpg"):
+                                           "Pictures", "htc"),
+                              "imag", ".jpg"):
         try:
             ol.push(filename)
         except:
