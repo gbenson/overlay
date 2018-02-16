@@ -45,6 +45,8 @@ class Overlayer(object):
             print("Initializing", self.__size)
             self.totals = numpy.zeros((self.__size[1], self.__size[0], 3),
                                       dtype=numpy.int64)
+            self.window = []
+            self.count = 0
         if cmp(*img.size) != cmp(*self.__size):
             img = img.transpose(Image.ROTATE_270)
         if img.size != self.__size:
@@ -52,8 +54,16 @@ class Overlayer(object):
             if (1 - scale[0] / scale[1]) > 0.005:
                 print("\x1B[31m%s %s\x1B[0m" % (img.size, scale))
             img = img.resize(self.__size, Image.ANTIALIAS)
-        self.totals += numpy.array(img)
-        self.__last = index
+        img = numpy.array(img)
+        self.totals += img
+        self.window.append(img)
+        while len(self.window) > 350:
+            img = self.window.pop(0)
+            self.totals -= img
+        self.count += 1
+        self.__last, wait = divmod(self.count, 10)
+        if not wait:
+            self.output()
 
     def output(self):
         img = self.totals.copy()
@@ -74,4 +84,3 @@ if __name__ == "__main__":
                                            "Pictures", "s4i"),
                               "imgp", ".jpg"):
         ol.push(filename)
-    ol.output()
