@@ -51,7 +51,6 @@ class Overlayer(object):
             scale = [i / s for i, s in zip(img.size, self.__size)]
             if (1 - scale[0] / scale[1]) > 0.005:
                 print("\x1B[31m%s %s\x1B[0m" % (img.size, scale))
-                #raise AssertionError
             img = img.resize(self.__size, Image.ANTIALIAS)
         self.totals += numpy.array(img)
         self.__last = index
@@ -74,10 +73,5 @@ if __name__ == "__main__":
     for filename in filenames(os.path.join(os.environ["HOME"],
                                            "Pictures", "s4i"),
                               "imgp", ".jpg"):
-        try:
-            ol.push(filename)
-        except:
-            break
-    else:
-        print("All done!")
+        ol.push(filename)
     ol.output()
